@@ -1,0 +1,12 @@
+[package]
+name = "url_keeper"
+version = "0.0.1"
+authors = ["Grégoire HUBERT <hubert.greg@gmail.com>"]
+edition = "2018"
+license = "CC-BY-SA"
+
+[dependencies]
+structopt = { version = "0.2" }
+url = "1.7"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.8"
