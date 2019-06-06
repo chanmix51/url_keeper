@@ -13,15 +13,7 @@ use simplelog::{TermLogger, LevelFilter, Config};
 
 fn main() {
     let clo = CommandLine::from_args();
-    let config = match ConfigFile::from_file(clo.config_file.as_str()) {
-        Ok(config) => config,
-        Err(e) => {
-            println!("Error. Could not read configuration from file '{}'.\n{:?}.", clo.config_file, e);
-            std::process::exit(1);
-        }
-    };
-
-    let logger = {
+    let _logger = {
         let level: LevelFilter = match clo.verbosity {
             0 => LevelFilter::Error,
             1 => LevelFilter::Warn,
@@ -30,9 +22,15 @@ fn main() {
             _ => LevelFilter::Trace,
         };
 
-        TermLogger::new(level, Config::default()).unwrap()
+        TermLogger::init(level, Config::default()).unwrap()
     };
-
-    println!("logger = {}", logger.level);
-    info!("CLO = {:?}", clo);
+    debug!("CLO = {:?}", clo);
+    let config = match ConfigFile::from_file(clo.config_file.as_str()) {
+        Ok(config) => config,
+        Err(e) => {
+            error!("Error. Could not read configuration from file '{}'.", clo.config_file);
+            debug!("Error thrown is {:?}.", e);
+            std::process::exit(1);
+        }
+    };
 }
